@@ -22,3 +22,6 @@ nPts = 5000;
 tSpan = linspace(t0,tBurn,nPts);
 
 % Call ode45 function 
+tau = tSpan*sqrt(g0/rOrbit);
+
+[t,y] = ode45(ltmOdeSolver,tSpan,IC);
