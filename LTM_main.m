@@ -7,21 +7,22 @@ rEarth = 6378e3;
 muEarth = 3.986e14;
 
 % Given spacecraft/orbit data
-rOrbit = 6698e3;
+r0 = 6698e3;
 v = 500e-5;
 t0 = 0;
 tBurn = 172800; % 2 days => s
-vOrbit0 = sqrt(muEarth/rOrbit);
+vOrbit0 = sqrt(muEarth/r0);
 
 % Graviational accleration function 
 g = @(r) g0*(r0/r)^2;
 
 % ODE initial conditions
-IC = [0 1 1]; %dp/dt p do/dt
+IC = [1 0 1 0]; %p0 A0 B0 theta0
 nPts = 5000;
 tSpan = linspace(t0,tBurn,nPts);
 
 % Call ode45 function 
-tau = tSpan*sqrt(g0/rOrbit);
+[t,y] = ode45(@(t,y) ltmOdeSolver(t,y,r0,v),tSpan,IC);   % y = [rho A B theta]
 
-[t,y] = ode45(ltmOdeSolver,tSpan,IC);
+
+%% Plot spacecraft orbit
