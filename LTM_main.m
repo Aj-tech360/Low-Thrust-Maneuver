@@ -1,6 +1,6 @@
 % AE 414 Low Thrust Maneuver Project
 close all;clear;clc;
-
+ 
 % Constants
 g0 = 9.81;
 rEarth = 6378e3;
@@ -17,12 +17,24 @@ vOrbit0 = sqrt(muEarth/r0);
 g = @(r) g0*(r0/r)^2;
 
 % ODE initial conditions
-IC = [1 0 1 0]; %p0 A0 B0 theta0
+IC = [1;0;1;0]; %rho0 A0 B0 theta0
 nPts = 5000;
 tSpan = linspace(t0,tBurn,nPts);
 
-% Call ode45 function 
-[t,y] = ode45(@(t,y) ltmOdeSolver(t,y,r0,v),tSpan,IC);   % y = [rho A B theta]
+% ode45 function to find rho
+[t,y] = ode45(@(t,y) ltmOdeSolver(t,y,r0,v),tSpan,IC);   % y = [rho; A; B; theta]
+
+% Plot spacecraft orbit
+x = r0*y(:,1).*cos(y(:,4));
+y = r0*y(:,1).*sin(y(:,4));
+
+figure;
+plot(x/10^3,y/10^3);
+grid on;
+axis equal;
+title('Spacecraft Orbit Over Two Days');
+xlabel('x [km]');
+ylabel('y [km]');
 
 
-%% Plot spacecraft orbit
+
