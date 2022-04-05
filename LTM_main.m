@@ -6,6 +6,7 @@ g0 = 9.81;
 rEarth = 6378e3;
 muEarth = 3.986e14;
 
+%% LTM for 2 Days
 % Given spacecraft/orbit data
 r0 = 6698e3;
 v = 500e-5;
@@ -43,7 +44,8 @@ tau = sqrt(g0/r0)*t;
 dtdT = sqrt(r0/g0);
 dPdT = y(:,2)*dtdT;
 dAdT = ((y(:,3).^2-y(:,1))./y(:,1).^3)*dtdT;
-uNorm = sqrt(r0*g0)*sqrt(dPdT.^2 + (y(:,1).*(dAdT+(1./y(:,1)))));
+vOrbitNorm0 = vOrbit0*tau;
+uNorm = vOrbitNorm0 + sqrt(r0*g0)*sqrt(dPdT.^2 + (y(:,1).*(dAdT+(1./y(:,1)))));
 
 % Find minimum velocity and dimensional time (in hours)
 minVel = min(uNorm);
@@ -59,18 +61,42 @@ xlabel('Normalized Time');
 ylabel('Normalized Velocity');
 
 
+close all;
+
+
 %% Spacecraft orbit transfer
 % Given spacecraft/orbit parameters
 v = 2.7e-5;
 rGSO = 35786e3;
+tSpan = linspace(0,3e7,nPts*10);
 
 % Calculate rho until r0*rho = rGSO
-tSpan = linspace(0,10000000000);  % enough time to ensure desired orbit is reached 
 opts = odeset('Events',@(t,y) ltmOdeEventHandler(t,y,r0,rGSO));
-[t,y,te,ye,ie] = ode45(@(t,y) ltmOdeSolver(t,y,r0,v),tSpan,IC,opts);
+[t,y,te,ye,ie] = ode45(@(t,y) ltmOdeSolver(t,y,r0,v),tSpan,IC,opts); % y = [rho; A; B; theta]
+transferTime = te/86400; % time to reach orbit in days
+fprintf('Time to reach GSO: %.2f days\n',transferTime);
 
 % Calculate delta V 
+
+
 % Plot orbit transfer
-% Hohmann transfer calculations
+figure;
+theta = linspace(0,2*pi);
+xInt = r0*cos(theta);
+yInt = r0*sin(theta);
+xFinal = rGSO*cos(theta);
+yFinal = rGSO*sin(theta);
+xTransfer = r0*y(:,1).*cos(y(:,4));
+yTransfer = r0*y(:,1).*sin(y(:,4));
+plot(xInt/1e3,yInt/1e3,'g',xFinal/1e3,yFinal/1e3,'r');
+hold on;
+plot(xTransfer/1e3,yTransfer/1e3,'k');
+grid on;
+axis equal;
+title('LTM Transfer from LEO to GSO');
+xlabel('x [km]');
+ylabel('y [km]');
+
+
 
 
