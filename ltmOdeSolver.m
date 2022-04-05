@@ -5,7 +5,7 @@ function dydt = ltmOdeSolver(t,y,r0,v)
     %   @param t   -> time vector from ode45 function (not used)
     %   @param y   -> 4x1 array of the states (y = [rho A B theta])
     %   @param r0  -> initial orbit radius in meters
-    %   @param v   -> 
+    %   @param v   -> dimensionless thrust
     %   @returns   -> 4x1 array of the state derivatives (dydt) 
     % --------------------------------------------------------------------------------
 
@@ -22,4 +22,5 @@ function dydt = ltmOdeSolver(t,y,r0,v)
 
     % Return the needed dertivatives
     dydt = [dPdt;dAdt;dBdt;d0dt];
+    
 end
