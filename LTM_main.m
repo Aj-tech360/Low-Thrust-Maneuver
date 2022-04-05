@@ -26,8 +26,9 @@ tSpan = linspace(t0,tBurn,nPts);
 [t,y] = ode45(@(t,y) ltmOdeSolver(t,y,r0,v),tSpan,IC);   % y = [rho; A; B; theta]
 
 % Plot spacecraft orbit
-xPlot = r0*y(:,1).*cos(y(:,4));
-yPlot = r0*y(:,1).*sin(y(:,4));
+r = r0*y(:,1);
+xPlot = r.*cos(y(:,4));
+yPlot = r.*sin(y(:,4));
 
 figure;
 plot(xPlot/10^3,yPlot/10^3);
@@ -40,29 +41,24 @@ ylabel('y [km]');
 % Convert time (t) to normalized time (tau)
 tau = sqrt(g0/r0)*t;
 
-% Calculate velocity (normalized)
-dtdT = sqrt(r0/g0);
-dPdT = y(:,2)*dtdT;
-dAdT = ((y(:,3).^2-y(:,1))./y(:,1).^3)*dtdT;
-vOrbitNorm0 = vOrbit0*tau;
-uNorm = vOrbitNorm0 + sqrt(r0*g0)*sqrt(dPdT.^2 + (y(:,1).*(dAdT+(1./y(:,1)))));
+% Calculate velocity (dimensional)
+rDot = r0*y(:,2);
+thetaDot = sqrt(muEarth/r.^3);
+uDim = sqrt(rDot.^2 + thetaDot*r.^2);
 
 % Find minimum velocity and dimensional time (in hours)
-minVel = min(uNorm);
-minVelTau = find(uNorm==minVel);
+minVel = min(uDim);
+minVelTau = find(uDim==minVel);
 minVelTime = minVelTau*sqrt(r0/g0);
+fprintf('The minimum velocity is %.2f km/s at %.2f s\n',minVel/1e3,minVelTime);
 
 % Plot velocity vs normalized time
 figure;
-plot(tau,uNorm);
+plot(tau,uDim);
 grid on;
 title('Normalized Velocity of Spacecraft');
 xlabel('Normalized Time');
 ylabel('Normalized Velocity');
-
-
-close all;
-
 
 %% Spacecraft orbit transfer
 % Given spacecraft/orbit parameters
