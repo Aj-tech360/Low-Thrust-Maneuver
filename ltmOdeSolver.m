@@ -2,11 +2,11 @@ function dydt = ltmOdeSolver(t,y,r0,v)
     % ltmOdeSolver solves for the first-order ODEs for use in the low thrust maneuver 
     % ODE for electrical rocekt engines
     % ltmOdeSovler returns the first-order ODEs for use in the ode45 function 
-    %   @param t   -> time vector from ode45 function (not used)
-    %   @param y   -> 4x1 array of the states (y = [rho A B theta])
-    %   @param r0  -> initial orbit radius in meters
-    %   @param v   -> dimensionless thrust
-    %   @returns   -> 4x1 array of the state derivatives (dydt) 
+    %   @param t       -> time vector from ode45 function (not used)
+    %   @param y       -> 4x1 array of the states (y = [rho A B theta])
+    %   @param r0      -> initial orbit radius in meters
+    %   @param v       -> dimensionless thrust
+    %   @returns dydt  -> 4x1 array of the state derivatives (dydt) 
     % --------------------------------------------------------------------------------
 
     % Constants 

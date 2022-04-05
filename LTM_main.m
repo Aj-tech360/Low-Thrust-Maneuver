@@ -65,6 +65,10 @@ v = 2.7e-5;
 rGSO = 35786e3;
 
 % Calculate rho until r0*rho = rGSO
+tSpan = linspace(0,10000000000);  % enough time to ensure desired orbit is reached 
+opts = odeset('Events',@(t,y) ltmOdeEventHandler(t,y,r0,rGSO));
+[t,y,te,ye,ie] = ode45(@(t,y) ltmOdeSolver(t,y,r0,v),tSpan,IC,opts);
+
 % Calculate delta V 
 % Plot orbit transfer
 % Hohmann transfer calculations

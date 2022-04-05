@@ -43,7 +43,7 @@ tau = sqrt(g0/r0)*t;
 dtdT = sqrt(r0/g0);
 dPdT = y(:,2)*dtdT;
 dAdT = ((y(:,3).^2-y(:,1))./y(:,1).^3)*dtdT;
-uNorm = sqrt(r0*g0)*sqrt(dPdT.^2 + (y(:,1).*(dAdT+(1./y(:,1)))))
+uNorm = sqrt(r0*g0)*sqrt(dPdT.^2 + (y(:,1).*(dAdT+(1./y(:,1)))));
 
 % Find minimum velocity and dimensional time (in hours)
 minVel = min(uNorm);
@@ -59,13 +59,14 @@ xlabel('Normalized Time');
 ylabel('Normalized Velocity');
 
 
-
 %% Spacecraft orbit transfer
 % Given spacecraft/orbit parameters
 v = 2.7e-5;
 rGSO = 35786e3;
 
 % Calculate rho until r0*rho = rGSO
+opts = odeset();
+[t,y,te,ye,ie] =  
 % Calculate delta V 
 % Plot orbit transfer
 % Hohmann transfer calculations
