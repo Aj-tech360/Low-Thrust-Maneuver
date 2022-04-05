@@ -36,5 +36,19 @@ title('Spacecraft Orbit Over Two Days');
 xlabel('x [km]');
 ylabel('y [km]');
 
+% Conver time (t) to normalized time (tau)
+% Calculate velocity (dimensional or normalized)
+% Find minimum velocity and dimensional time (in hours)
+
+
+%% Spacecraft orbit transfer
+% Given spacecraft/orbit parameters
+v = 2.7e-5;
+rGSO = 35786e3;
+
+% Calculate rho until r0*rho = rGSO
+% Calculate delta V 
+% Plot orbit transfer
+% Hohmann transfer calculations
 
 
