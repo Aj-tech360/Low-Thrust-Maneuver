@@ -31,12 +31,12 @@ xPlot = r.*cos(y(:,4));
 yPlot = r.*sin(y(:,4));
 
 figure;
-plot(xPlot/10^3,yPlot/10^3);
+plot(xPlot/rEarth,yPlot/rEarth);
 grid on;
 axis equal;
 title('Spacecraft Orbit Over Two Days');
-xlabel('x [km]');
-ylabel('y [km]');
+xlabel('x [Earth Radii]');
+ylabel('y [Earth Radii]');
 
 % Convert time (t) to normalized time (tau)
 tau = sqrt(g0/r0)*t;
@@ -54,11 +54,11 @@ fprintf('The minimum velocity is %.2f km/s at %.2f s\n',minVel/1e3,minVelTime);
 
 % Plot velocity vs normalized time
 figure;
-plot(tau,uDim);
+plot(tau,uDim/1e3);
 grid on;
 title('Normalized Velocity of Spacecraft');
 xlabel('Normalized Time');
-ylabel('Normalized Velocity');
+ylabel('Dimensional Velocity [km/s]');
 
 %% Spacecraft orbit transfer
 % Given spacecraft/orbit parameters
@@ -84,14 +84,14 @@ xFinal = rGSO*cos(theta);
 yFinal = rGSO*sin(theta);
 xTransfer = r0*y(:,1).*cos(y(:,4));
 yTransfer = r0*y(:,1).*sin(y(:,4));
-plot(xInt/1e3,yInt/1e3,'g',xFinal/1e3,yFinal/1e3,'r');
+plot(xInt/rEarth,yInt/rEarth,'g',xFinal/rEarth,yFinal/rEarth,'r');
 hold on;
-plot(xTransfer/1e3,yTransfer/1e3,'k');
+plot(xTransfer/rEarth,yTransfer/rEarth,'k');
 grid on;
 axis equal;
 title('LTM Transfer from LEO to GSO');
-xlabel('x [km]');
-ylabel('y [km]');
+xlabel('x [Earth Radii]');
+ylabel('y [Earth Radii]');
 
 
 
