@@ -20,6 +20,7 @@ g = @(r) g0*(r0/r)^2;
 % ODE initial conditions
 IC = [1;0;1;0]; %rho0 A0 B0 theta0
 nPts = 5000;
+
 tSpan = linspace(t0,tBurn,nPts);
 
 % ode45 function to find rho
@@ -77,7 +78,7 @@ fprintf('Time to reach GSO: %.2f days\n',transferTime);
 
 % Plot orbit transfer
 figure;
-theta = linspace(0,2*pi);
+theta = linspace(0,2*pi,1000);
 xInt = r0*cos(theta);
 yInt = r0*sin(theta);
 xFinal = rGSO*cos(theta);
