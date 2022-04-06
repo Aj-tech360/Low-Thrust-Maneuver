@@ -1,4 +1,9 @@
-% AE 414 Low Thrust Maneuver Project
+% Low Thrust Maneuver Project
+% Ronak Amin, Benjamin Sites, Christopher Rappole 
+% AE 414 – 01 
+% Prof. Laksh Narayanaswami 
+% April 22, 2022 
+
 close all;clear;clc;
  
 % Constants
@@ -45,7 +50,7 @@ tau = sqrt(g0/r0)*t;
 % Calculate velocity (dimensional)
 rDot = r0*y(:,2);
 thetaDot = sqrt(muEarth/r.^3);
-uDim = sqrt(rDot.^2 + thetaDot*r.^2);
+uDim = sqrt(rDot.^2 + (thetaDot.^2)*(r.^2));
 
 % Find minimum velocity and dimensional time (in hours)
 minVel = min(uDim);
@@ -62,6 +67,7 @@ xlabel('Normalized Time');
 ylabel('Dimensional Velocity [km/s]');
 
 %% Spacecraft orbit transfer
+
 % Given spacecraft/orbit parameters
 v = 2.7e-5;
 rGSO = 35786e3;
@@ -74,6 +80,8 @@ transferTime = te/86400; % time to reach orbit in days
 fprintf('Time to reach GSO: %.2f days\n',transferTime);
 
 % Calculate delta V 
+
+
 
 
 % Plot orbit transfer
@@ -95,5 +103,34 @@ xlabel('x [Earth Radii]');
 ylabel('y [Earth Radii]');
 
 
+%% Hohmann Tranfer Calculations
+% Tranfer orbit calculations
+rTransfer = (r0+rGSO)/2;
+eTransfer = -muEarth/(r0+rGSO);
+v1Orbit = sqrt(muEarth/r0);
+v2Orbit = sqrt(muEarth/rGSO);
+v1Transfer = sqrt(2*(muEarth/r0 + eTransfer));
+v2Transfer = sqrt(2*(muEarth/rGSO + eTransfer));
+tTransfer = sqrt(rTransfer^3/muEarth);
+
+% dV maneuver calcuations
+dV1 = v1Transfer - v1Orbit;
+dV2 = v2Orbit-v1Transfer;
+dVTotal = abs(dV1) + abs(dV2);
+fprintf('\nTotal delta V for Hohmann Transfer: %.2f km/s\n',dVTotal/1e3);
+fprintf('Time to reach GSO with Hohmann Transfer: %.2f hours\n',tTransfer/3600);
+
+% Plot Hohmann Transfer
+figure;
+xHohmann = rTransfer*cos(theta) - (rTransfer-r0);
+yHohmann = rTransfer*sin(theta);
+plot(xInt/rEarth,yInt/rEarth,'g',xFinal/rEarth,yFinal/rEarth,'r');
+hold on;
+plot(xHohmann/rEarth,yHohmann/rEarth,'k');
+grid on;
+axis equal;
+title('Hohmann Transfer from LEO to GSO');
+xlabel('x [Earth Radii]');
+ylabel('y [Earth Radii]');
 
 
