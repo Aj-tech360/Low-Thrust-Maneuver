@@ -49,8 +49,8 @@ tau = sqrt(g0/r0)*t;
 
 % Calculate velocity (dimensional)
 rDot = r0*y(:,2);
-thetaDot = sqrt(muEarth/r.^3);
-uDim = sqrt(rDot.^2 + (thetaDot.^2)*(r.^2));
+thetaDotSquared = (1./y(:,1)).*(y(:,2).*sqrt(r0/g0) + (1./y(:,1).^2)).*sqrt(g0/r0);
+uDim = sqrt(rDot.^2 + thetaDotSquared.*(r.^2));
 
 % Find minimum velocity and dimensional time (in hours)
 minVel = min(uDim);
@@ -66,8 +66,7 @@ title('Normalized Velocity of Spacecraft');
 xlabel('Normalized Time');
 ylabel('Dimensional Velocity [km/s]');
 
-%% Spacecraft orbit transfer
-
+%% Spacecraft LTM Orbit Transfer
 % Given spacecraft/orbit parameters
 v = 2.7e-5;
 rGSO = 35786e3;
@@ -95,7 +94,7 @@ xTransfer = r0*y(:,1).*cos(y(:,4));
 yTransfer = r0*y(:,1).*sin(y(:,4));
 plot(xInt/rEarth,yInt/rEarth,'g',xFinal/rEarth,yFinal/rEarth,'r');
 hold on;
-plot(xTransfer/rEarth,yTransfer/rEarth,'b');
+plot(xTransfer/rEarth,yTransfer/rEarth,'color','#0072BD');
 grid on;
 axis equal;
 title('LTM Transfer from LEO to GSO');
@@ -126,7 +125,7 @@ xHohmann = rTransfer*cos(theta) - (rTransfer-r0);
 yHohmann = rTransfer*sin(theta);
 plot(xInt/rEarth,yInt/rEarth,'g',xFinal/rEarth,yFinal/rEarth,'r');
 hold on;
-plot(xHohmann/rEarth,yHohmann/rEarth,'b');
+plot(xHohmann/rEarth,yHohmann/rEarth,'color','#0072BD');
 grid on;
 axis equal;
 title('Hohmann Transfer from LEO to GSO');
