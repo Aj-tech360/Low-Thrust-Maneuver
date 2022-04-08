@@ -59,9 +59,9 @@ fprintf('The minimum velocity is %.2f km/s at %.2f hr\n',minVel/1e3,minVelTime);
 figure;
 plot(tau,uDim/1e3);
 grid on;
-title('Normalized Velocity of Spacecraft');
+title('Dimensional Velocity of Spacecraft Over 2 Days');
 xlabel('Normalized Time');
-ylabel('Dimensional Velocity [km/s]');
+ylabel('Velocity [km/s]');
 
 %% Spacecraft LTM Orbit Transfer
 % Given spacecraft/orbit parameters
@@ -76,6 +76,15 @@ transferTime = te/86400; % time to reach orbit in days
 fprintf('Time to reach GSO: %.2f days\n',transferTime);
 
 % Calculate delta V 
+transferVel = velCalc(y,r0,vOrbit0);
+fprintf('The spacecraft''s velocity at GSO altitude is: %.2f km/s',transferVel(end)/1e3);
+
+%TODO: delta V = acceleration*te
+%rDotDot = sqrt(r0*g0)*((y(:,3)-y(:,1))./y(:,1).^3);
+%thetaDotDot = sqrt(y(:,1).*(y(:,3) + (g0/r0)*(1./y(:,1))));
+%accel = sqrt(rDotDot.^2 + (r0*y(:,1)).^2.*thetaDotDot.^2)
+%dvLtmTransfer = accel*te;
+%fprintf('Total delta V for LTM Transfer: %.2f km/s',dvLtmTransfer/1e3);
 
 
 
