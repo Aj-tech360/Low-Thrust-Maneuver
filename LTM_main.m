@@ -47,9 +47,7 @@ ylabel('y [Earth Radii]');
 tau = sqrt(g0/r0)*t;
 
 % Calculate velocity (dimensional)
-rDot = r0*y(:,2);
-thetaDotSquared = ((1./y(:,1)).*(y(:,2)*sqrt(g0/r0) + (1./y(:,1).^2)))*(r0/g0);
-uDim = sqrt(rDot.^2 + thetaDotSquared.*(r.^2));
+uDim = velCalc(y,r0,vOrbit0);
 
 % Find minimum velocity and dimensional time (in hours)
 minVel = min(uDim);
