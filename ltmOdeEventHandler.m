@@ -12,5 +12,4 @@ function [dR,isterminal,direction] = ltmOdeEventHandler(~,y,r0,rDesired)
     dR = r0*y(1) - rDesired; % stops when this value equals 0
     isterminal = 1;
     direction = 0;
-    
 end

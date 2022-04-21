@@ -14,9 +14,9 @@ function dydt = ltmOdeSolver(~,y,r0,v)
 
     % Calcuate the derivatives
     dTaudt = sqrt(g0/r0);
-    dPdt = y(2)*dTaudt;
-    dAdt = dTaudt*((y(3)^2 - y(1))/y(1)^3);
-    dBdt = v*y(1)*dTaudt;
+    dPdt = y(2)*dTaudt;                            
+    dAdt = dTaudt*((y(3)^2 - y(1))/y(1)^3);       
+    dBdt = v*y(1)*dTaudt;                           
     d0dt = sqrt(muEarth/(y(1)*r0)^3);
 
     % Return the needed dertivatives

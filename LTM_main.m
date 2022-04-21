@@ -12,6 +12,7 @@ rEarth = 6378e3;
 muEarth = 3.986e14;
 
 %% LTM for 2 Days
+fprintf('\n\t\t\t\tProblem 1\n-------------------------------------------\n');
 % Given spacecraft/orbit data
 r0 = 6698e3;
 v = 500e-5;
@@ -19,13 +20,12 @@ t0 = 0;
 tBurn = 172800; % 2 days => s
 vOrbit0 = sqrt(muEarth/r0);
 
-% Graviational accleration function 
-g = @(r) g0*(r0/r)^2;
+% Gravitational accelration function
+g = @(r) g0*(rEarth/r)^2;
 
 % ODE initial conditions
-IC = [1;0;1;0]; %rho0 A0 B0 theta0
+IC = [1;0;1;0]; % [rho0 A0 B0 theta0]
 nPts = 5000;
-
 tSpan = linspace(t0,tBurn,nPts);
 
 % ode45 function to find rho
@@ -63,10 +63,15 @@ title('Dimensional Velocity of Spacecraft Over 2 Days');
 xlabel('Normalized Time');
 ylabel('Velocity [km/s]');
 
+
+
 %% Spacecraft LTM Orbit Transfer
+fprintf('\n\t\t\t\tProblem 2\n-------------------------------------------\n');
+
 % Given spacecraft/orbit parameters
 v = 2.7e-5;
-rGSO = 35786e3;
+hGSO = 35786e3;
+rGSO = hGSO + rEarth;
 tSpan = linspace(0,3e7,nPts*10);
 
 % Calculate rho until r0*rho = rGSO
@@ -77,16 +82,10 @@ fprintf('Time to reach GSO: %.2f days\n',transferTime);
 
 % Calculate delta V 
 transferVel = velCalc(y,r0,vOrbit0);
-fprintf('The spacecraft''s velocity at GSO altitude is: %.2f km/s',transferVel(end)/1e3);
-
-%TODO: delta V = acceleration*te
-%rDotDot = sqrt(r0*g0)*((y(:,3)-y(:,1))./y(:,1).^3);
-%thetaDotDot = sqrt(y(:,1).*(y(:,3) + (g0/r0)*(1./y(:,1))));
-%accel = sqrt(rDotDot.^2 + (r0*y(:,1)).^2.*thetaDotDot.^2)
-%dvLtmTransfer = accel*te;
-%fprintf('Total delta V for LTM Transfer: %.2f km/s',dvLtmTransfer/1e3);
-
-
+fprintf('The spacecraft''s velocity at GSO altitude is: %.2f km/s\n',transferVel(end)/1e3);
+accTransfer = v*g(r0);
+dvLtmTransfer = accTransfer*te;
+fprintf('Total delta V for LTM Transfer: %.2f km/s',dvLtmTransfer/1e3);
 
 % Plot orbit transfer
 figure;
@@ -109,13 +108,13 @@ ylabel('y [Earth Radii]');
 
 %% Hohmann Tranfer Calculations
 % Tranfer orbit calculations
-rTransfer = (r0+rGSO)/2;
+aTransfer = (r0+rGSO)/2;
 eTransfer = -muEarth/(r0+rGSO);
 v1Orbit = sqrt(muEarth/r0);
 v2Orbit = sqrt(muEarth/rGSO);
 v1Transfer = sqrt(2*(muEarth/r0 + eTransfer));
 v2Transfer = sqrt(2*(muEarth/rGSO + eTransfer));
-tTransfer = sqrt(rTransfer^3/muEarth);
+tTransfer = sqrt(aTransfer^3/muEarth);
 
 % dV maneuver calcuations
 dV1 = v1Transfer - v1Orbit;
@@ -127,8 +126,8 @@ fprintf('Time to reach GSO with Hohmann Transfer: %.2f hours\n',tTransfer/3600);
 % Plot Hohmann Transfer
 figure;
 thetaTransfer = linspace(0,pi,500);
-xHohmann = rTransfer*cos(thetaTransfer) - (rTransfer-r0);
-yHohmann = rTransfer*sin(thetaTransfer);
+xHohmann = aTransfer*cos(thetaTransfer) - (aTransfer-r0);
+yHohmann = aTransfer*sin(thetaTransfer);
 plot(xInt/rEarth,yInt/rEarth,'g',xFinal/rEarth,yFinal/rEarth,'r');
 hold on;
 plot(xHohmann/rEarth,yHohmann/rEarth,'color','#0072BD');
@@ -139,3 +138,4 @@ xlabel('x [Earth Radii]');
 ylabel('y [Earth Radii]');
 
 
+close all
