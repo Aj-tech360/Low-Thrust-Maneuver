@@ -121,7 +121,8 @@ v1Orbit = sqrt(muEarth/r0);
 v2Orbit = sqrt(muEarth/rGSO);
 v1Transfer = sqrt(2*((muEarth/r0) + eTransfer));
 v2Transfer = sqrt(2*((muEarth/rGSO) + eTransfer));
-tTransfer = pi*sqrt(aTransfer^3/muEarth);
+eccTransfer = 1-(r0/aTransfer);
+tTransfer = pi*(1/sqrt(muEarth))*aTransfer^(3/2);
 
 % dV maneuver calcuations
 dV1 = v1Transfer - v1Orbit;
@@ -133,8 +134,8 @@ fprintf('Time to reach GSO with Hohmann Transfer: %.2f hours\n',tTransfer/3600);
 % Plot Hohmann Transfer
 figure;
 thetaTransfer = linspace(0,pi,500);
-xHohmann = aTransfer*cos(thetaTransfer) - (aTransfer-r0);
-yHohmann = aTransfer*sin(thetaTransfer);
+xHohmann = aTransfer*(cos(thetaTransfer)-eccTransfer);
+yHohmann = aTransfer*sqrt(1-eccTransfer^2)*sin(thetaTransfer);
 plot(xInt/rEarth,yInt/rEarth,'g',xFinal/rEarth,yFinal/rEarth,'r');
 hold on;
 plot(xHohmann/rEarth,yHohmann/rEarth,'color','#0072BD');
